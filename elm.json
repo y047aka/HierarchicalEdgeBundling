@@ -10,7 +10,8 @@
             "elm/core": "1.0.2",
             "elm/html": "1.0.0",
             "elm-community/typed-svg": "5.0.1",
-            "folkertdev/one-true-path-experiment": "4.0.2"
+            "folkertdev/one-true-path-experiment": "4.0.2",
+            "gampleman/elm-visualization": "2.0.0"
         },
         "indirect": {
             "avh4/elm-color": "1.0.0",
@@ -26,7 +27,10 @@
             "ianmackenzie/elm-float-extra": "1.0.1",
             "ianmackenzie/elm-geometry": "1.2.1",
             "ianmackenzie/elm-interval": "1.0.1",
-            "ianmackenzie/elm-triangular-mesh": "1.0.2"
+            "ianmackenzie/elm-triangular-mesh": "1.0.2",
+            "justinmimbs/date": "3.1.2",
+            "justinmimbs/time-extra": "1.1.0",
+            "ryannhg/date-format": "2.3.0"
         }
     },
     "test-dependencies": {
