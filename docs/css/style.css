@@ -1,0 +1,29 @@
+@charset "UTF-8";
+body, header, footer, h1, p, ul, li {
+  margin: 0;
+  padding: 0;
+  line-height: 1.0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif; }
+
+html {
+  font-size: 62.5%; }
+
+body {
+  font-size: 1.5rem;
+  color: #333; }
+
+h1 {
+  font-weight: normal; }
+
+svg circle {
+  fill: #EEE; }
+
+header.site-header {
+  padding: 1rem 2rem; }
+  header.site-header h1 {
+    font-size: 2.4rem; }
+
+footer.site-footer {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem; }
