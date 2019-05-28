@@ -2,12 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Data exposing (Company, companies)
+import HierarchicalEdgeBundling exposing (graph)
 import Html exposing (Html, footer, h1, header, li, node, p, text, ul)
 import Html.Attributes exposing (class, id, src)
-import TypedSvg exposing (circle, svg)
-import TypedSvg.Attributes exposing (viewBox)
-import TypedSvg.Attributes.InPx exposing (cx, cy, height, r, width, x, y)
-import TypedSvg.Core exposing (Svg)
 
 
 main =
@@ -60,20 +57,9 @@ view model =
         [ header [ class "site-header" ]
             [ h1 [] [ text "Hierarchical Edge Bundling" ]
             ]
-        , node "main" [] [ graph ]
+        , node "main" [] [ graph companies ]
         , footer [ class "site-footer" ]
             [ p [ class "copyright" ] [ text "© 2019 y047aka" ]
             ]
         ]
     }
-
-
-graph : Svg Msg
-graph =
-    svg
-        [ width 500
-        , height 500
-        , viewBox -250 -250 500 500
-        ]
-        [ circle [ cx 0, cy 0, r 200 ] []
-        ]

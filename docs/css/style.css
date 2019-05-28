@@ -15,9 +15,6 @@ body {
 h1 {
   font-weight: normal; }
 
-svg circle {
-  fill: #EEE; }
-
 header.site-header {
   padding: 1rem 2rem; }
   header.site-header h1 {
@@ -27,3 +24,10 @@ footer.site-footer {
   position: absolute;
   bottom: 2rem;
   right: 2rem; }
+
+.companies path {
+  fill: none;
+  stroke: rgba(0, 102, 153, 0.7); }
+
+.companies circle {
+  fill: #333; }
