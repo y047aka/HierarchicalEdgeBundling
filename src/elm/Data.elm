@@ -1,4 +1,4 @@
-module Data exposing (Company, companies)
+module Data exposing (Company, companies, relations)
 
 
 type alias Company =
@@ -10,6 +10,8 @@ companies : List Company
 companies =
     [ { name = "ALE"
       }
+    , { name = "Blue Origine"
+      }
     , { name = "JAXA"
       }
     , { name = "MHI"
@@ -18,4 +20,14 @@ companies =
       }
     , { name = "SpaceX"
       }
+    ]
+
+
+relations =
+    [ ( "ALE", "MHI" )
+    , ( "ALE", "JAXA" )
+    , ( "Blue Origine", "NASA" )
+    , ( "JAXA", "MHI" )
+    , ( "JAXA", "NASA" )
+    , ( "NASA", "SpaceX" )
     ]
