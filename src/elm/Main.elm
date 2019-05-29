@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Data exposing (Company, companies)
+import Data exposing (Company, companies, relations)
 import HierarchicalEdgeBundling exposing (graph)
 import Html exposing (Html, footer, h1, header, li, node, p, text, ul)
 import Html.Attributes exposing (class, id, src)
@@ -57,7 +57,7 @@ view model =
         [ header [ class "site-header" ]
             [ h1 [] [ text "Hierarchical Edge Bundling" ]
             ]
-        , node "main" [] [ graph companies ]
+        , node "main" [] [ graph companies relations ]
         , footer [ class "site-footer" ]
             [ p [ class "copyright" ] [ text "© 2019 y047aka" ]
             ]

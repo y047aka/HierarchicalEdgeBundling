@@ -4430,6 +4430,7 @@ var elm$core$Set$toList = function (_n0) {
 var author$project$Data$companies = _List_fromArray(
 	[
 		{name: 'ALE'},
+		{name: 'Blue Origine'},
 		{name: 'JAXA'},
 		{name: 'MHI'},
 		{name: 'NASA'},
@@ -4843,6 +4844,54 @@ var author$project$Main$init = function (_n0) {
 var author$project$Main$update = F2(
 	function (msg, model) {
 		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+	});
+var author$project$Data$relations = _List_fromArray(
+	[
+		_Utils_Tuple2('ALE', 'MHI'),
+		_Utils_Tuple2('ALE', 'JAXA'),
+		_Utils_Tuple2('Blue Origine', 'NASA'),
+		_Utils_Tuple2('JAXA', 'MHI'),
+		_Utils_Tuple2('JAXA', 'NASA'),
+		_Utils_Tuple2('NASA', 'SpaceX')
+	]);
+var elm_community$list_extra$List$Extra$findIndexHelp = F3(
+	function (index, predicate, list) {
+		findIndexHelp:
+		while (true) {
+			if (!list.b) {
+				return elm$core$Maybe$Nothing;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (predicate(x)) {
+					return elm$core$Maybe$Just(index);
+				} else {
+					var $temp$index = index + 1,
+						$temp$predicate = predicate,
+						$temp$list = xs;
+					index = $temp$index;
+					predicate = $temp$predicate;
+					list = $temp$list;
+					continue findIndexHelp;
+				}
+			}
+		}
+	});
+var elm_community$list_extra$List$Extra$findIndex = elm_community$list_extra$List$Extra$findIndexHelp(0);
+var author$project$HierarchicalEdgeBundling$findCompanyIndex = F2(
+	function (name, companies) {
+		var index = A2(
+			elm_community$list_extra$List$Extra$findIndex,
+			function (item) {
+				return _Utils_eq(item.name, name);
+			},
+			companies);
+		if (index.$ === 'Just') {
+			var number = index.a;
+			return number;
+		} else {
+			return 0;
+		}
 	});
 var elm$core$Basics$cos = _Basics_cos;
 var elm$core$Basics$pi = _Basics_pi;
@@ -6242,7 +6291,7 @@ var author$project$HierarchicalEdgeBundling$viewCurve = F2(
 			_Utils_Tuple2(
 				elm$core$Basics$degrees(0),
 				elm$core$Basics$degrees(360)),
-			_Utils_Tuple2(0, 5));
+			_Utils_Tuple2(0, 6));
 		return A3(
 			flip,
 			folkertdev$one_true_path_experiment$SubPath$element,
@@ -6435,7 +6484,7 @@ var author$project$HierarchicalEdgeBundling$viewNode = F2(
 		var angleScale = A2(
 			gampleman$elm_visualization$Scale$linear,
 			_Utils_Tuple2(0, 360),
-			_Utils_Tuple2(0, 5));
+			_Utils_Tuple2(0, 6));
 		var angle = A2(gampleman$elm_visualization$Scale$convert, angleScale, i);
 		return A2(
 			elm_community$typed_svg$TypedSvg$g,
@@ -6503,40 +6552,55 @@ var elm_community$typed_svg$TypedSvg$Attributes$InPx$width = function (value) {
 	return elm_community$typed_svg$TypedSvg$Attributes$width(
 		elm_community$typed_svg$TypedSvg$Types$px(value));
 };
-var author$project$HierarchicalEdgeBundling$graph = function (companies) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$svg,
-		_List_fromArray(
-			[
-				elm_community$typed_svg$TypedSvg$Attributes$InPx$width(1000),
-				elm_community$typed_svg$TypedSvg$Attributes$InPx$height(1000),
-				A4(elm_community$typed_svg$TypedSvg$Attributes$viewBox, -500, -500, 1000, 1000)
-			]),
-		_List_fromArray(
-			[
-				A2(
-				elm_community$typed_svg$TypedSvg$g,
-				_List_fromArray(
-					[
-						elm_community$typed_svg$TypedSvg$Attributes$class(
-						_List_fromArray(
-							['companies']))
-					]),
-				_List_fromArray(
-					[
-						A2(
-						elm_community$typed_svg$TypedSvg$g,
-						_List_Nil,
-						A2(elm$core$List$indexedMap, author$project$HierarchicalEdgeBundling$viewNode, companies)),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 0, 2),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 0, 3),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 1, 2),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 1, 3),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 2, 4),
-						A2(author$project$HierarchicalEdgeBundling$viewCurve, 3, 4)
-					]))
-			]));
-};
+var author$project$HierarchicalEdgeBundling$graph = F2(
+	function (companies, relations) {
+		return A2(
+			elm_community$typed_svg$TypedSvg$svg,
+			_List_fromArray(
+				[
+					elm_community$typed_svg$TypedSvg$Attributes$InPx$width(1000),
+					elm_community$typed_svg$TypedSvg$Attributes$InPx$height(1000),
+					A4(elm_community$typed_svg$TypedSvg$Attributes$viewBox, -500, -500, 1000, 1000)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm_community$typed_svg$TypedSvg$g,
+					_List_fromArray(
+						[
+							elm_community$typed_svg$TypedSvg$Attributes$class(
+							_List_fromArray(
+								['companies']))
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm_community$typed_svg$TypedSvg$g,
+							_List_Nil,
+							A2(elm$core$List$indexedMap, author$project$HierarchicalEdgeBundling$viewNode, companies)),
+							A2(
+							elm_community$typed_svg$TypedSvg$g,
+							_List_Nil,
+							A2(
+								elm$core$List$map,
+								function (_n1) {
+									var a = _n1.a;
+									var b = _n1.b;
+									return A2(author$project$HierarchicalEdgeBundling$viewCurve, a, b);
+								},
+								A2(
+									elm$core$List$map,
+									function (_n0) {
+										var a = _n0.a;
+										var b = _n0.b;
+										return _Utils_Tuple2(
+											A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
+											A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
+									},
+									relations)))
+						]))
+				]));
+	});
 var elm$html$Html$footer = _VirtualDom_node('footer');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$html$Html$header = _VirtualDom_node('header');
@@ -6581,7 +6645,7 @@ var author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						author$project$HierarchicalEdgeBundling$graph(author$project$Data$companies)
+						A2(author$project$HierarchicalEdgeBundling$graph, author$project$Data$companies, author$project$Data$relations)
 					])),
 				A2(
 				elm$html$Html$footer,
