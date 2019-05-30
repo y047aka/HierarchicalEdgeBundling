@@ -26,10 +26,7 @@ graph companies relations =
         , viewBox -500 -500 1000 1000
         ]
         [ g [ TypedSvg.Attributes.class [ "companies" ] ]
-            [ g []
-                (companies
-                    |> List.indexedMap (viewNode angleScale)
-                )
+            [ viewNodes companies angleScale
             , viewCurves companies relations
             ]
         ]
@@ -76,6 +73,14 @@ viewCurve ( thetaA, thetaB ) =
     points
         |> Curve.bundle 0.2
         |> flip SubPath.element []
+
+
+viewNodes : List Company -> ContinuousScale Float -> Svg msg
+viewNodes companies angleScale =
+    g []
+        (companies
+            |> List.indexedMap (viewNode angleScale)
+        )
 
 
 viewNode : ContinuousScale Float -> Int -> Company -> Svg msg
