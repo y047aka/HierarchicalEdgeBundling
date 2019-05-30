@@ -37,10 +37,11 @@ viewCurves companies relations =
         |> List.map
             (\( a, b ) ->
                 viewCurve
-                    ( a
+                    (a
                         |> findCompanyIndex companies
                         |> Scale.convert angleScale
-                    , b
+                    )
+                    (b
                         |> findCompanyIndex companies
                         |> Scale.convert angleScale
                     )
@@ -48,8 +49,8 @@ viewCurves companies relations =
         |> g [ class [ "curves" ] ]
 
 
-viewCurve : ( Float, Float ) -> Svg msg
-viewCurve ( thetaA, thetaB ) =
+viewCurve : Float -> Float -> Svg msg
+viewCurve thetaA thetaB =
     let
         r =
             400
