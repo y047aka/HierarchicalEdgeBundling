@@ -6074,31 +6074,30 @@ var folkertdev$one_true_path_experiment$SubPath$element = F2(
 				attributes),
 			_List_Nil);
 	});
-var author$project$HierarchicalEdgeBundling$viewCurve = F2(
-	function (node1, node2) {
-		var r = 400;
-		var flip = F3(
-			function (_function, argB, argA) {
-				return A2(_function, argA, argB);
-			});
-		var angleB = node2;
-		var angleA = node1;
-		var points = _List_fromArray(
-			[
-				_Utils_Tuple2(
-				r * elm$core$Basics$cos(angleA),
-				r * elm$core$Basics$sin(angleA)),
-				_Utils_Tuple2(0, 0),
-				_Utils_Tuple2(
-				r * elm$core$Basics$cos(angleB),
-				r * elm$core$Basics$sin(angleB))
-			]);
-		return A3(
-			flip,
-			folkertdev$one_true_path_experiment$SubPath$element,
-			_List_Nil,
-			A2(folkertdev$one_true_path_experiment$Curve$bundle, 0.2, points));
-	});
+var author$project$HierarchicalEdgeBundling$viewCurve = function (_n0) {
+	var thetaA = _n0.a;
+	var thetaB = _n0.b;
+	var r = 400;
+	var points = _List_fromArray(
+		[
+			_Utils_Tuple2(
+			r * elm$core$Basics$cos(thetaA),
+			r * elm$core$Basics$sin(thetaA)),
+			_Utils_Tuple2(0, 0),
+			_Utils_Tuple2(
+			r * elm$core$Basics$cos(thetaB),
+			r * elm$core$Basics$sin(thetaB))
+		]);
+	var flip = F3(
+		function (_function, argB, argA) {
+			return A2(_function, argA, argB);
+		});
+	return A3(
+		flip,
+		folkertdev$one_true_path_experiment$SubPath$element,
+		_List_Nil,
+		A2(folkertdev$one_true_path_experiment$Curve$bundle, 0.2, points));
+};
 var elm$core$Basics$pi = _Basics_pi;
 var elm$core$Basics$degrees = function (angleInDegrees) {
 	return (angleInDegrees * elm$core$Basics$pi) / 180;
@@ -6334,30 +6333,21 @@ var author$project$HierarchicalEdgeBundling$viewCurves = F2(
 			_List_Nil,
 			A2(
 				elm$core$List$map,
-				function (_n2) {
-					var a = _n2.a;
-					var b = _n2.b;
-					return A2(author$project$HierarchicalEdgeBundling$viewCurve, a, b);
+				function (_n0) {
+					var a = _n0.a;
+					var b = _n0.b;
+					return author$project$HierarchicalEdgeBundling$viewCurve(
+						_Utils_Tuple2(
+							A2(
+								gampleman$elm_visualization$Scale$convert,
+								angleScale,
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, a)),
+							A2(
+								gampleman$elm_visualization$Scale$convert,
+								angleScale,
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, b))));
 				},
-				A2(
-					elm$core$List$map,
-					function (_n1) {
-						var a = _n1.a;
-						var b = _n1.b;
-						return _Utils_Tuple2(
-							A2(gampleman$elm_visualization$Scale$convert, angleScale, a),
-							A2(gampleman$elm_visualization$Scale$convert, angleScale, b));
-					},
-					A2(
-						elm$core$List$map,
-						function (_n0) {
-							var a = _n0.a;
-							var b = _n0.b;
-							return _Utils_Tuple2(
-								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, a),
-								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, b));
-						},
-						relations))));
+				relations));
 	});
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;

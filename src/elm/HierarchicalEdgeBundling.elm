@@ -45,36 +45,28 @@ viewCurves companies relations =
     relations
         |> List.map
             (\( a, b ) ->
-                ( findCompanyIndex companies a
-                , findCompanyIndex companies b
-                )
+                viewCurve
+                    ( a
+                        |> findCompanyIndex companies
+                        |> Scale.convert angleScale
+                    , b
+                        |> findCompanyIndex companies
+                        |> Scale.convert angleScale
+                    )
             )
-        |> List.map
-            (\( a, b ) ->
-                ( Scale.convert angleScale a
-                , Scale.convert angleScale b
-                )
-            )
-        |> List.map (\( a, b ) -> viewCurve a b)
         |> g []
 
 
-viewCurve : Float -> Float -> Svg msg
-viewCurve node1 node2 =
+viewCurve : ( Float, Float ) -> Svg msg
+viewCurve ( thetaA, thetaB ) =
     let
         r =
             400
 
-        angleA =
-            node1
-
-        angleB =
-            node2
-
         points =
-            [ ( r * cos angleA, r * sin angleA )
+            [ ( r * cos thetaA, r * sin thetaA )
             , ( 0, 0 )
-            , ( r * cos angleB, r * sin angleB )
+            , ( r * cos thetaB, r * sin thetaB )
             ]
 
         flip : (a -> b -> c) -> b -> a -> c
