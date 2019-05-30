@@ -7,7 +7,7 @@ import List.Extra as List
 import Scale exposing (ContinuousScale)
 import SubPath exposing (SubPath)
 import TypedSvg exposing (circle, g, polyline, svg, text_)
-import TypedSvg.Attributes exposing (points, transform, viewBox)
+import TypedSvg.Attributes exposing (class, points, transform, viewBox)
 import TypedSvg.Attributes.InPx exposing (cx, cy, height, r, width, x, x1, x2, y, y1, y2)
 import TypedSvg.Core exposing (Svg)
 import TypedSvg.Types exposing (Transform(..))
@@ -16,14 +16,13 @@ import TypedSvg.Types exposing (Transform(..))
 graph : List Company -> List ( String, String ) -> Svg msg
 graph companies relations =
     svg
-        [ width 1000
+        [ class [ "hierarchical-edge-bundling" ]
+        , width 1000
         , height 1000
         , viewBox -500 -500 1000 1000
         ]
-        [ g [ TypedSvg.Attributes.class [ "companies" ] ]
-            [ viewNodes companies
-            , viewCurves companies relations
-            ]
+        [ viewNodes companies
+        , viewCurves companies relations
         ]
 
 
@@ -46,7 +45,7 @@ viewCurves companies relations =
                         |> Scale.convert angleScale
                     )
             )
-        |> g []
+        |> g [ class [ "curves" ] ]
 
 
 viewCurve : ( Float, Float ) -> Svg msg
@@ -77,10 +76,9 @@ viewNodes companies =
         angleScale =
             Scale.linear ( 0, 360 ) ( 0, toFloat (List.length companies) )
     in
-    g []
-        (companies
-            |> List.indexedMap (viewNode angleScale)
-        )
+    companies
+        |> List.indexedMap (viewNode angleScale)
+        |> g [ class [ "nodes" ] ]
 
 
 viewNode : ContinuousScale Float -> Int -> Company -> Svg msg

@@ -6108,6 +6108,20 @@ var elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
 };
 var elm_community$typed_svg$TypedSvg$Core$node = elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
 var elm_community$typed_svg$TypedSvg$g = elm_community$typed_svg$TypedSvg$Core$node('g');
+var elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var elm_community$typed_svg$TypedSvg$Core$attribute = elm$virtual_dom$VirtualDom$attribute;
+var elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'class',
+		A2(elm$core$String$join, ' ', names));
+};
 var gampleman$elm_visualization$Scale$convert = F2(
 	function (_n0, value) {
 		var scale = _n0.a;
@@ -6330,7 +6344,12 @@ var author$project$HierarchicalEdgeBundling$viewCurves = F2(
 				elm$core$List$length(companies)));
 		return A2(
 			elm_community$typed_svg$TypedSvg$g,
-			_List_Nil,
+			_List_fromArray(
+				[
+					elm_community$typed_svg$TypedSvg$Attributes$class(
+					_List_fromArray(
+						['curves']))
+				]),
 			A2(
 				elm$core$List$map,
 				function (_n0) {
@@ -6352,14 +6371,6 @@ var author$project$HierarchicalEdgeBundling$viewCurves = F2(
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var elm_community$typed_svg$TypedSvg$text_ = elm_community$typed_svg$TypedSvg$Core$node('text');
-var elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var elm_community$typed_svg$TypedSvg$Core$attribute = elm$virtual_dom$VirtualDom$attribute;
 var elm$core$String$concat = function (strings) {
 	return A2(elm$core$String$join, '', strings);
 };
@@ -6540,19 +6551,18 @@ var author$project$HierarchicalEdgeBundling$viewNodes = function (companies) {
 			elm$core$List$length(companies)));
 	return A2(
 		elm_community$typed_svg$TypedSvg$g,
-		_List_Nil,
+		_List_fromArray(
+			[
+				elm_community$typed_svg$TypedSvg$Attributes$class(
+				_List_fromArray(
+					['nodes']))
+			]),
 		A2(
 			elm$core$List$indexedMap,
 			author$project$HierarchicalEdgeBundling$viewNode(angleScale),
 			companies));
 };
 var elm_community$typed_svg$TypedSvg$svg = elm_community$typed_svg$TypedSvg$Core$node('svg');
-var elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'class',
-		A2(elm$core$String$join, ' ', names));
-};
 var elm_community$typed_svg$TypedSvg$Attributes$viewBox = F4(
 	function (minX, minY, vWidth, vHeight) {
 		return A2(
@@ -6593,25 +6603,17 @@ var author$project$HierarchicalEdgeBundling$graph = F2(
 			elm_community$typed_svg$TypedSvg$svg,
 			_List_fromArray(
 				[
+					elm_community$typed_svg$TypedSvg$Attributes$class(
+					_List_fromArray(
+						['hierarchical-edge-bundling'])),
 					elm_community$typed_svg$TypedSvg$Attributes$InPx$width(1000),
 					elm_community$typed_svg$TypedSvg$Attributes$InPx$height(1000),
 					A4(elm_community$typed_svg$TypedSvg$Attributes$viewBox, -500, -500, 1000, 1000)
 				]),
 			_List_fromArray(
 				[
-					A2(
-					elm_community$typed_svg$TypedSvg$g,
-					_List_fromArray(
-						[
-							elm_community$typed_svg$TypedSvg$Attributes$class(
-							_List_fromArray(
-								['companies']))
-						]),
-					_List_fromArray(
-						[
-							author$project$HierarchicalEdgeBundling$viewNodes(companies),
-							A2(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations)
-						]))
+					author$project$HierarchicalEdgeBundling$viewNodes(companies),
+					A2(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations)
 				]));
 	});
 var elm$html$Html$footer = _VirtualDom_node('footer');
