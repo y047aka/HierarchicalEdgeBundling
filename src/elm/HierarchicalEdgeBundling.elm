@@ -30,28 +30,46 @@ graph companies relations =
                 (companies
                     |> List.indexedMap (viewNode angleScale)
                 )
-            , g [] (viewCurves companies relations angleScale)
+            , viewCurves companies relations
             ]
         ]
 
 
-viewCurves companies relations angleScale =
+viewCurves : List Company -> List ( String, String ) -> Svg msg
+viewCurves companies relations =
+    let
+        angleScale : ContinuousScale Float
+        angleScale =
+            Scale.linear ( degrees 0, degrees 360 ) ( 0, companies |> List.length |> toFloat )
+    in
     relations
-        |> List.map (\( a, b ) -> ( findCompanyIndex a companies, findCompanyIndex b companies ))
-        |> List.map (\( a, b ) -> viewCurve a b angleScale)
+        |> List.map
+            (\( a, b ) ->
+                ( findCompanyIndex a companies
+                , findCompanyIndex b companies
+                )
+            )
+        |> List.map
+            (\( a, b ) ->
+                ( Scale.convert angleScale a
+                , Scale.convert angleScale b
+                )
+            )
+        |> List.map (\( a, b ) -> viewCurve a b)
+        |> g []
 
 
-viewCurve : Float -> Float -> ContinuousScale Float -> Svg msg
-viewCurve node1 node2 angleScale =
+viewCurve : Float -> Float -> Svg msg
+viewCurve node1 node2 =
     let
         r =
             400
 
         angleA =
-            node1 |> Scale.convert angleScale |> degrees
+            node1
 
         angleB =
-            node2 |> Scale.convert angleScale |> degrees
+            node2
 
         points =
             [ ( r * cos angleA, r * sin angleA )

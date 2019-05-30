@@ -4903,10 +4903,6 @@ var author$project$HierarchicalEdgeBundling$findCompanyIndex = F2(
 		}
 	});
 var elm$core$Basics$cos = _Basics_cos;
-var elm$core$Basics$pi = _Basics_pi;
-var elm$core$Basics$degrees = function (angleInDegrees) {
-	return (angleInDegrees * elm$core$Basics$pi) / 180;
-};
 var elm$core$Basics$sin = _Basics_sin;
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
@@ -6078,22 +6074,15 @@ var folkertdev$one_true_path_experiment$SubPath$element = F2(
 				attributes),
 			_List_Nil);
 	});
-var gampleman$elm_visualization$Scale$convert = F2(
-	function (_n0, value) {
-		var scale = _n0.a;
-		return A3(scale.convert, scale.domain, scale.range, value);
-	});
-var author$project$HierarchicalEdgeBundling$viewCurve = F3(
-	function (node1, node2, angleScale) {
+var author$project$HierarchicalEdgeBundling$viewCurve = F2(
+	function (node1, node2) {
 		var r = 400;
 		var flip = F3(
 			function (_function, argB, argA) {
 				return A2(_function, argA, argB);
 			});
-		var angleB = elm$core$Basics$degrees(
-			A2(gampleman$elm_visualization$Scale$convert, angleScale, node2));
-		var angleA = elm$core$Basics$degrees(
-			A2(gampleman$elm_visualization$Scale$convert, angleScale, node1));
+		var angleB = node2;
+		var angleA = node1;
 		var points = _List_fromArray(
 			[
 				_Utils_Tuple2(
@@ -6110,34 +6099,268 @@ var author$project$HierarchicalEdgeBundling$viewCurve = F3(
 			_List_Nil,
 			A2(folkertdev$one_true_path_experiment$Curve$bundle, 0.2, points));
 	});
-var author$project$HierarchicalEdgeBundling$viewCurves = F3(
-	function (companies, relations, angleScale) {
-		return A2(
-			elm$core$List$map,
-			function (_n1) {
-				var a = _n1.a;
-				var b = _n1.b;
-				return A3(author$project$HierarchicalEdgeBundling$viewCurve, a, b, angleScale);
-			},
-			A2(
-				elm$core$List$map,
-				function (_n0) {
-					var a = _n0.a;
-					var b = _n0.b;
-					return _Utils_Tuple2(
-						A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
-						A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
-				},
-				relations));
-	});
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$core$Basics$pi = _Basics_pi;
+var elm$core$Basics$degrees = function (angleInDegrees) {
+	return (angleInDegrees * elm$core$Basics$pi) / 180;
+};
 var elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
 	return _VirtualDom_nodeNS(
 		_VirtualDom_noScript(tag));
 };
 var elm_community$typed_svg$TypedSvg$Core$node = elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
 var elm_community$typed_svg$TypedSvg$g = elm_community$typed_svg$TypedSvg$Core$node('g');
+var gampleman$elm_visualization$Scale$convert = F2(
+	function (_n0, value) {
+		var scale = _n0.a;
+		return A3(scale.convert, scale.domain, scale.range, value);
+	});
+var gampleman$elm_visualization$Scale$Scale = function (a) {
+	return {$: 'Scale', a: a};
+};
+var gampleman$elm_visualization$Scale$Internal$bimap = F4(
+	function (_n0, _n1, deinterpolate, reinterpolate) {
+		var d0 = _n0.a;
+		var d1 = _n0.b;
+		var r0 = _n1.a;
+		var r1 = _n1.b;
+		var _n2 = (_Utils_cmp(d1, d0) < 0) ? _Utils_Tuple2(
+			A2(deinterpolate, d1, d0),
+			A2(reinterpolate, r1, r0)) : _Utils_Tuple2(
+			A2(deinterpolate, d0, d1),
+			A2(reinterpolate, r0, r1));
+		var de = _n2.a;
+		var re = _n2.b;
+		return A2(elm$core$Basics$composeL, re, de);
+	});
+var gampleman$elm_visualization$Scale$Internal$interpolateFloat = F3(
+	function (from, to, time) {
+		return from + ((to - from) * time);
+	});
+var gampleman$elm_visualization$Scale$Linear$deinterpolate = F3(
+	function (a, b, x) {
+		var normalizedB = b - a;
+		return (!normalizedB) ? 0 : ((x - a) / normalizedB);
+	});
+var gampleman$elm_visualization$Scale$Linear$convert = F2(
+	function (domain, range) {
+		return A4(gampleman$elm_visualization$Scale$Internal$bimap, domain, range, gampleman$elm_visualization$Scale$Linear$deinterpolate, gampleman$elm_visualization$Scale$Internal$interpolateFloat);
+	});
+var gampleman$elm_visualization$Scale$Linear$interpolate = gampleman$elm_visualization$Scale$Internal$interpolateFloat;
+var gampleman$elm_visualization$Scale$Linear$invert = F2(
+	function (domain, range) {
+		return A4(gampleman$elm_visualization$Scale$Internal$bimap, range, domain, gampleman$elm_visualization$Scale$Linear$deinterpolate, gampleman$elm_visualization$Scale$Linear$interpolate);
+	});
+var elm$core$Basics$e = _Basics_e;
+var elm$core$Basics$ge = _Utils_ge;
+var elm$core$Basics$sqrt = _Basics_sqrt;
+var gampleman$elm_visualization$Statistics$tickStep = F3(
+	function (start, stop, count) {
+		var step0 = elm$core$Basics$abs(stop - start) / A2(elm$core$Basics$max, 0, count);
+		var step1 = A2(
+			elm$core$Basics$pow,
+			10,
+			elm$core$Basics$floor(
+				A2(elm$core$Basics$logBase, elm$core$Basics$e, step0) / A2(elm$core$Basics$logBase, elm$core$Basics$e, 10)));
+		var error = step0 / step1;
+		var step2 = (_Utils_cmp(
+			error,
+			elm$core$Basics$sqrt(50)) > -1) ? (step1 * 10) : ((_Utils_cmp(
+			error,
+			elm$core$Basics$sqrt(10)) > -1) ? (step1 * 5) : ((_Utils_cmp(
+			error,
+			elm$core$Basics$sqrt(2)) > -1) ? (step1 * 2) : step1));
+		return (_Utils_cmp(stop, start) < 0) ? (-step2) : step2;
+	});
+var gampleman$elm_visualization$Scale$Linear$nice = F2(
+	function (_n0, count) {
+		var start = _n0.a;
+		var stop = _n0.b;
+		var step0 = A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count);
+		var step1 = A3(
+			gampleman$elm_visualization$Statistics$tickStep,
+			elm$core$Basics$floor(start / step0) * step0,
+			elm$core$Basics$ceiling(stop / step0) * step0,
+			count);
+		return _Utils_Tuple2(
+			elm$core$Basics$floor(start / step1) * step1,
+			elm$core$Basics$ceiling(stop / step1) * step1);
+	});
+var gampleman$elm_visualization$Scale$Linear$rangeExtent = F2(
+	function (d, r) {
+		return r;
+	});
+var elm$core$String$length = _String_length;
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3(elm$core$String$repeatHelp, n, chunk, '');
+	});
+var elm$core$String$padRight = F3(
+	function (n, _char, string) {
+		return _Utils_ap(
+			string,
+			A2(
+				elm$core$String$repeat,
+				n - elm$core$String$length(string),
+				elm$core$String$fromChar(_char)));
+	});
+var gampleman$elm_visualization$Scale$Internal$toFixed = F2(
+	function (precision, value) {
+		var power = A2(elm$core$Basics$pow, 10, precision);
+		var pad = function (num) {
+			_n0$2:
+			while (true) {
+				if (num.b) {
+					if (num.b.b) {
+						if (!num.b.b.b) {
+							var x = num.a;
+							var _n1 = num.b;
+							var y = _n1.a;
+							return _List_fromArray(
+								[
+									x,
+									A3(
+									elm$core$String$padRight,
+									precision,
+									_Utils_chr('0'),
+									y)
+								]);
+						} else {
+							break _n0$2;
+						}
+					} else {
+						var val = num.a;
+						return (precision > 0) ? _List_fromArray(
+							[
+								val,
+								A3(
+								elm$core$String$padRight,
+								precision,
+								_Utils_chr('0'),
+								'')
+							]) : _List_fromArray(
+							[val]);
+					}
+				} else {
+					break _n0$2;
+				}
+			}
+			var val = num;
+			return val;
+		};
+		return A2(
+			elm$core$String$join,
+			'.',
+			pad(
+				A2(
+					elm$core$String$split,
+					'.',
+					elm$core$String$fromFloat(
+						elm$core$Basics$round(value * power) / power))));
+	});
+var gampleman$elm_visualization$Scale$Linear$exponent = function (x) {
+	return (!x) ? 0 : ((x < 1) ? (1 + gampleman$elm_visualization$Scale$Linear$exponent(x * 10)) : 0);
+};
+var gampleman$elm_visualization$Scale$Linear$precisionFixed = function (step) {
+	return A2(
+		elm$core$Basics$max,
+		0,
+		gampleman$elm_visualization$Scale$Linear$exponent(
+			elm$core$Basics$abs(step)));
+};
+var gampleman$elm_visualization$Scale$Linear$tickFormat = F2(
+	function (_n0, count) {
+		var start = _n0.a;
+		var stop = _n0.b;
+		return gampleman$elm_visualization$Scale$Internal$toFixed(
+			gampleman$elm_visualization$Scale$Linear$precisionFixed(
+				A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count)));
+	});
+var elm$core$Bitwise$or = _Bitwise_or;
+var gampleman$elm_visualization$Statistics$range = F3(
+	function (start, stop, step) {
+		var n = A2(
+			elm$core$Basics$max,
+			0,
+			0 | elm$core$Basics$ceiling((stop - start) / step));
+		var helper = F2(
+			function (i, list) {
+				return (i >= 0) ? A2(
+					helper,
+					i - 1,
+					A2(elm$core$List$cons, start + (step * i), list)) : list;
+			});
+		return A2(helper, n - 1, _List_Nil);
+	});
+var gampleman$elm_visualization$Statistics$ticks = F3(
+	function (start, stop, count) {
+		var step = A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count);
+		var end = (elm$core$Basics$floor(stop / step) * step) + (step / 2);
+		var beg = elm$core$Basics$ceiling(start / step) * step;
+		return A3(gampleman$elm_visualization$Statistics$range, beg, end, step);
+	});
+var gampleman$elm_visualization$Scale$Linear$ticks = F2(
+	function (_n0, count) {
+		var start = _n0.a;
+		var end = _n0.b;
+		return A3(gampleman$elm_visualization$Statistics$ticks, start, end, count);
+	});
+var gampleman$elm_visualization$Scale$linear = F2(
+	function (range_, domain_) {
+		return gampleman$elm_visualization$Scale$Scale(
+			{convert: gampleman$elm_visualization$Scale$Linear$convert, domain: domain_, invert: gampleman$elm_visualization$Scale$Linear$invert, nice: gampleman$elm_visualization$Scale$Linear$nice, range: range_, rangeExtent: gampleman$elm_visualization$Scale$Linear$rangeExtent, tickFormat: gampleman$elm_visualization$Scale$Linear$tickFormat, ticks: gampleman$elm_visualization$Scale$Linear$ticks});
+	});
+var author$project$HierarchicalEdgeBundling$viewCurves = F2(
+	function (companies, relations) {
+		var angleScale = A2(
+			gampleman$elm_visualization$Scale$linear,
+			_Utils_Tuple2(
+				elm$core$Basics$degrees(0),
+				elm$core$Basics$degrees(360)),
+			_Utils_Tuple2(
+				0,
+				elm$core$List$length(companies)));
+		return A2(
+			elm_community$typed_svg$TypedSvg$g,
+			_List_Nil,
+			A2(
+				elm$core$List$map,
+				function (_n2) {
+					var a = _n2.a;
+					var b = _n2.b;
+					return A2(author$project$HierarchicalEdgeBundling$viewCurve, a, b);
+				},
+				A2(
+					elm$core$List$map,
+					function (_n1) {
+						var a = _n1.a;
+						var b = _n1.b;
+						return _Utils_Tuple2(
+							A2(gampleman$elm_visualization$Scale$convert, angleScale, a),
+							A2(gampleman$elm_visualization$Scale$convert, angleScale, b));
+					},
+					A2(
+						elm$core$List$map,
+						function (_n0) {
+							var a = _n0.a;
+							var b = _n0.b;
+							return _Utils_Tuple2(
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
+						},
+						relations))));
+	});
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var elm_community$typed_svg$TypedSvg$text_ = elm_community$typed_svg$TypedSvg$Core$node('text');
 var elm$virtual_dom$VirtualDom$attribute = F2(
 	function (key, value) {
@@ -6359,211 +6582,6 @@ var elm_community$typed_svg$TypedSvg$Attributes$InPx$width = function (value) {
 	return elm_community$typed_svg$TypedSvg$Attributes$width(
 		elm_community$typed_svg$TypedSvg$Types$px(value));
 };
-var gampleman$elm_visualization$Scale$Scale = function (a) {
-	return {$: 'Scale', a: a};
-};
-var gampleman$elm_visualization$Scale$Internal$bimap = F4(
-	function (_n0, _n1, deinterpolate, reinterpolate) {
-		var d0 = _n0.a;
-		var d1 = _n0.b;
-		var r0 = _n1.a;
-		var r1 = _n1.b;
-		var _n2 = (_Utils_cmp(d1, d0) < 0) ? _Utils_Tuple2(
-			A2(deinterpolate, d1, d0),
-			A2(reinterpolate, r1, r0)) : _Utils_Tuple2(
-			A2(deinterpolate, d0, d1),
-			A2(reinterpolate, r0, r1));
-		var de = _n2.a;
-		var re = _n2.b;
-		return A2(elm$core$Basics$composeL, re, de);
-	});
-var gampleman$elm_visualization$Scale$Internal$interpolateFloat = F3(
-	function (from, to, time) {
-		return from + ((to - from) * time);
-	});
-var gampleman$elm_visualization$Scale$Linear$deinterpolate = F3(
-	function (a, b, x) {
-		var normalizedB = b - a;
-		return (!normalizedB) ? 0 : ((x - a) / normalizedB);
-	});
-var gampleman$elm_visualization$Scale$Linear$convert = F2(
-	function (domain, range) {
-		return A4(gampleman$elm_visualization$Scale$Internal$bimap, domain, range, gampleman$elm_visualization$Scale$Linear$deinterpolate, gampleman$elm_visualization$Scale$Internal$interpolateFloat);
-	});
-var gampleman$elm_visualization$Scale$Linear$interpolate = gampleman$elm_visualization$Scale$Internal$interpolateFloat;
-var gampleman$elm_visualization$Scale$Linear$invert = F2(
-	function (domain, range) {
-		return A4(gampleman$elm_visualization$Scale$Internal$bimap, range, domain, gampleman$elm_visualization$Scale$Linear$deinterpolate, gampleman$elm_visualization$Scale$Linear$interpolate);
-	});
-var elm$core$Basics$e = _Basics_e;
-var elm$core$Basics$ge = _Utils_ge;
-var elm$core$Basics$sqrt = _Basics_sqrt;
-var gampleman$elm_visualization$Statistics$tickStep = F3(
-	function (start, stop, count) {
-		var step0 = elm$core$Basics$abs(stop - start) / A2(elm$core$Basics$max, 0, count);
-		var step1 = A2(
-			elm$core$Basics$pow,
-			10,
-			elm$core$Basics$floor(
-				A2(elm$core$Basics$logBase, elm$core$Basics$e, step0) / A2(elm$core$Basics$logBase, elm$core$Basics$e, 10)));
-		var error = step0 / step1;
-		var step2 = (_Utils_cmp(
-			error,
-			elm$core$Basics$sqrt(50)) > -1) ? (step1 * 10) : ((_Utils_cmp(
-			error,
-			elm$core$Basics$sqrt(10)) > -1) ? (step1 * 5) : ((_Utils_cmp(
-			error,
-			elm$core$Basics$sqrt(2)) > -1) ? (step1 * 2) : step1));
-		return (_Utils_cmp(stop, start) < 0) ? (-step2) : step2;
-	});
-var gampleman$elm_visualization$Scale$Linear$nice = F2(
-	function (_n0, count) {
-		var start = _n0.a;
-		var stop = _n0.b;
-		var step0 = A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count);
-		var step1 = A3(
-			gampleman$elm_visualization$Statistics$tickStep,
-			elm$core$Basics$floor(start / step0) * step0,
-			elm$core$Basics$ceiling(stop / step0) * step0,
-			count);
-		return _Utils_Tuple2(
-			elm$core$Basics$floor(start / step1) * step1,
-			elm$core$Basics$ceiling(stop / step1) * step1);
-	});
-var gampleman$elm_visualization$Scale$Linear$rangeExtent = F2(
-	function (d, r) {
-		return r;
-	});
-var elm$core$String$length = _String_length;
-var elm$core$Bitwise$and = _Bitwise_and;
-var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var elm$core$String$repeatHelp = F3(
-	function (n, chunk, result) {
-		return (n <= 0) ? result : A3(
-			elm$core$String$repeatHelp,
-			n >> 1,
-			_Utils_ap(chunk, chunk),
-			(!(n & 1)) ? result : _Utils_ap(result, chunk));
-	});
-var elm$core$String$repeat = F2(
-	function (n, chunk) {
-		return A3(elm$core$String$repeatHelp, n, chunk, '');
-	});
-var elm$core$String$padRight = F3(
-	function (n, _char, string) {
-		return _Utils_ap(
-			string,
-			A2(
-				elm$core$String$repeat,
-				n - elm$core$String$length(string),
-				elm$core$String$fromChar(_char)));
-	});
-var gampleman$elm_visualization$Scale$Internal$toFixed = F2(
-	function (precision, value) {
-		var power = A2(elm$core$Basics$pow, 10, precision);
-		var pad = function (num) {
-			_n0$2:
-			while (true) {
-				if (num.b) {
-					if (num.b.b) {
-						if (!num.b.b.b) {
-							var x = num.a;
-							var _n1 = num.b;
-							var y = _n1.a;
-							return _List_fromArray(
-								[
-									x,
-									A3(
-									elm$core$String$padRight,
-									precision,
-									_Utils_chr('0'),
-									y)
-								]);
-						} else {
-							break _n0$2;
-						}
-					} else {
-						var val = num.a;
-						return (precision > 0) ? _List_fromArray(
-							[
-								val,
-								A3(
-								elm$core$String$padRight,
-								precision,
-								_Utils_chr('0'),
-								'')
-							]) : _List_fromArray(
-							[val]);
-					}
-				} else {
-					break _n0$2;
-				}
-			}
-			var val = num;
-			return val;
-		};
-		return A2(
-			elm$core$String$join,
-			'.',
-			pad(
-				A2(
-					elm$core$String$split,
-					'.',
-					elm$core$String$fromFloat(
-						elm$core$Basics$round(value * power) / power))));
-	});
-var gampleman$elm_visualization$Scale$Linear$exponent = function (x) {
-	return (!x) ? 0 : ((x < 1) ? (1 + gampleman$elm_visualization$Scale$Linear$exponent(x * 10)) : 0);
-};
-var gampleman$elm_visualization$Scale$Linear$precisionFixed = function (step) {
-	return A2(
-		elm$core$Basics$max,
-		0,
-		gampleman$elm_visualization$Scale$Linear$exponent(
-			elm$core$Basics$abs(step)));
-};
-var gampleman$elm_visualization$Scale$Linear$tickFormat = F2(
-	function (_n0, count) {
-		var start = _n0.a;
-		var stop = _n0.b;
-		return gampleman$elm_visualization$Scale$Internal$toFixed(
-			gampleman$elm_visualization$Scale$Linear$precisionFixed(
-				A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count)));
-	});
-var elm$core$Bitwise$or = _Bitwise_or;
-var gampleman$elm_visualization$Statistics$range = F3(
-	function (start, stop, step) {
-		var n = A2(
-			elm$core$Basics$max,
-			0,
-			0 | elm$core$Basics$ceiling((stop - start) / step));
-		var helper = F2(
-			function (i, list) {
-				return (i >= 0) ? A2(
-					helper,
-					i - 1,
-					A2(elm$core$List$cons, start + (step * i), list)) : list;
-			});
-		return A2(helper, n - 1, _List_Nil);
-	});
-var gampleman$elm_visualization$Statistics$ticks = F3(
-	function (start, stop, count) {
-		var step = A3(gampleman$elm_visualization$Statistics$tickStep, start, stop, count);
-		var end = (elm$core$Basics$floor(stop / step) * step) + (step / 2);
-		var beg = elm$core$Basics$ceiling(start / step) * step;
-		return A3(gampleman$elm_visualization$Statistics$range, beg, end, step);
-	});
-var gampleman$elm_visualization$Scale$Linear$ticks = F2(
-	function (_n0, count) {
-		var start = _n0.a;
-		var end = _n0.b;
-		return A3(gampleman$elm_visualization$Statistics$ticks, start, end, count);
-	});
-var gampleman$elm_visualization$Scale$linear = F2(
-	function (range_, domain_) {
-		return gampleman$elm_visualization$Scale$Scale(
-			{convert: gampleman$elm_visualization$Scale$Linear$convert, domain: domain_, invert: gampleman$elm_visualization$Scale$Linear$invert, nice: gampleman$elm_visualization$Scale$Linear$nice, range: range_, rangeExtent: gampleman$elm_visualization$Scale$Linear$rangeExtent, tickFormat: gampleman$elm_visualization$Scale$Linear$tickFormat, ticks: gampleman$elm_visualization$Scale$Linear$ticks});
-	});
 var author$project$HierarchicalEdgeBundling$graph = F2(
 	function (companies, relations) {
 		var angleScale = A2(
@@ -6599,10 +6617,7 @@ var author$project$HierarchicalEdgeBundling$graph = F2(
 								elm$core$List$indexedMap,
 								author$project$HierarchicalEdgeBundling$viewNode(angleScale),
 								companies)),
-							A2(
-							elm_community$typed_svg$TypedSvg$g,
-							_List_Nil,
-							A3(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations, angleScale))
+							A2(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations)
 						]))
 				]));
 	});
