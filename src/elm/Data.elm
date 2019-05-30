@@ -8,29 +8,21 @@ type alias Company =
 
 companies : List Company
 companies =
-    [ { name = "ALE"
-      }
-    , { name = "Bigelow Aerospace"
-      }
-    , { name = "Blue Origine"
-      }
-    , { name = "ESA"
-      }
-    , { name = "ispace"
-      }
-    , { name = "JAXA"
-      }
-    , { name = "MHI"
-      }
-    , { name = "NASA"
-      }
-    , { name = "SpaceX"
-      }
+    [ { name = "ESA" }
+    , { name = "JAXA" }
+    , { name = "NASA" }
+    , { name = "ALE" }
+    , { name = "Bigelow Aerospace" }
+    , { name = "ispace" }
+    , { name = "Blue Origine" }
+    , { name = "IST" }
+    , { name = "三菱重工" }
+    , { name = "SpaceX" }
     ]
 
 
 relations =
-    [ ( "ALE", "MHI" )
+    [ ( "ALE", "三菱重工" )
     , ( "ALE", "JAXA" )
     , ( "Bigelow Aerospace", "NASA" )
     , ( "Bigelow Aerospace", "SpaceX" )
@@ -38,8 +30,11 @@ relations =
     , ( "ESA", "JAXA" )
     , ( "ESA", "NASA" )
     , ( "Blue Origine", "NASA" )
+    , ( "ispace", "JAXA" )
+    , ( "ispace", "NASA" )
     , ( "ispace", "SpaceX" )
-    , ( "JAXA", "MHI" )
+    , ( "IST", "JAXA" )
+    , ( "JAXA", "三菱重工" )
     , ( "JAXA", "NASA" )
     , ( "NASA", "SpaceX" )
     ]

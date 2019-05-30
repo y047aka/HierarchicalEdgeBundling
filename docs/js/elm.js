@@ -4429,14 +4429,15 @@ var elm$core$Set$toList = function (_n0) {
 };
 var author$project$Data$companies = _List_fromArray(
 	[
+		{name: 'ESA'},
+		{name: 'JAXA'},
+		{name: 'NASA'},
 		{name: 'ALE'},
 		{name: 'Bigelow Aerospace'},
-		{name: 'Blue Origine'},
-		{name: 'ESA'},
 		{name: 'ispace'},
-		{name: 'JAXA'},
-		{name: 'MHI'},
-		{name: 'NASA'},
+		{name: 'Blue Origine'},
+		{name: 'IST'},
+		{name: '三菱重工'},
 		{name: 'SpaceX'}
 	]);
 var author$project$Main$Model = function (companies) {
@@ -4850,7 +4851,7 @@ var author$project$Main$update = F2(
 	});
 var author$project$Data$relations = _List_fromArray(
 	[
-		_Utils_Tuple2('ALE', 'MHI'),
+		_Utils_Tuple2('ALE', '三菱重工'),
 		_Utils_Tuple2('ALE', 'JAXA'),
 		_Utils_Tuple2('Bigelow Aerospace', 'NASA'),
 		_Utils_Tuple2('Bigelow Aerospace', 'SpaceX'),
@@ -4858,8 +4859,11 @@ var author$project$Data$relations = _List_fromArray(
 		_Utils_Tuple2('ESA', 'JAXA'),
 		_Utils_Tuple2('ESA', 'NASA'),
 		_Utils_Tuple2('Blue Origine', 'NASA'),
+		_Utils_Tuple2('ispace', 'JAXA'),
+		_Utils_Tuple2('ispace', 'NASA'),
 		_Utils_Tuple2('ispace', 'SpaceX'),
-		_Utils_Tuple2('JAXA', 'MHI'),
+		_Utils_Tuple2('IST', 'JAXA'),
+		_Utils_Tuple2('JAXA', '三菱重工'),
 		_Utils_Tuple2('JAXA', 'NASA'),
 		_Utils_Tuple2('NASA', 'SpaceX')
 	]);
