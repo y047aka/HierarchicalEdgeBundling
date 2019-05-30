@@ -10,7 +10,13 @@ companies : List Company
 companies =
     [ { name = "ALE"
       }
+    , { name = "Bigelow Aerospace"
+      }
     , { name = "Blue Origine"
+      }
+    , { name = "ESA"
+      }
+    , { name = "ispace"
       }
     , { name = "JAXA"
       }
@@ -26,7 +32,13 @@ companies =
 relations =
     [ ( "ALE", "MHI" )
     , ( "ALE", "JAXA" )
+    , ( "Bigelow Aerospace", "NASA" )
+    , ( "Bigelow Aerospace", "SpaceX" )
+    , ( "ESA", "ispace" )
+    , ( "ESA", "JAXA" )
+    , ( "ESA", "NASA" )
     , ( "Blue Origine", "NASA" )
+    , ( "ispace", "SpaceX" )
     , ( "JAXA", "MHI" )
     , ( "JAXA", "NASA" )
     , ( "NASA", "SpaceX" )
