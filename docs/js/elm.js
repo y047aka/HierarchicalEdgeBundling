@@ -6531,16 +6531,21 @@ var author$project$HierarchicalEdgeBundling$viewNode = F3(
 						]))
 				]));
 	});
-var author$project$HierarchicalEdgeBundling$viewNodes = F2(
-	function (companies, angleScale) {
-		return A2(
-			elm_community$typed_svg$TypedSvg$g,
-			_List_Nil,
-			A2(
-				elm$core$List$indexedMap,
-				author$project$HierarchicalEdgeBundling$viewNode(angleScale),
-				companies));
-	});
+var author$project$HierarchicalEdgeBundling$viewNodes = function (companies) {
+	var angleScale = A2(
+		gampleman$elm_visualization$Scale$linear,
+		_Utils_Tuple2(0, 360),
+		_Utils_Tuple2(
+			0,
+			elm$core$List$length(companies)));
+	return A2(
+		elm_community$typed_svg$TypedSvg$g,
+		_List_Nil,
+		A2(
+			elm$core$List$indexedMap,
+			author$project$HierarchicalEdgeBundling$viewNode(angleScale),
+			companies));
+};
 var elm_community$typed_svg$TypedSvg$svg = elm_community$typed_svg$TypedSvg$Core$node('svg');
 var elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
 	return A2(
@@ -6584,12 +6589,6 @@ var elm_community$typed_svg$TypedSvg$Attributes$InPx$width = function (value) {
 };
 var author$project$HierarchicalEdgeBundling$graph = F2(
 	function (companies, relations) {
-		var angleScale = A2(
-			gampleman$elm_visualization$Scale$linear,
-			_Utils_Tuple2(0, 360),
-			_Utils_Tuple2(
-				0,
-				elm$core$List$length(companies)));
 		return A2(
 			elm_community$typed_svg$TypedSvg$svg,
 			_List_fromArray(
@@ -6610,7 +6609,7 @@ var author$project$HierarchicalEdgeBundling$graph = F2(
 						]),
 					_List_fromArray(
 						[
-							A2(author$project$HierarchicalEdgeBundling$viewNodes, companies, angleScale),
+							author$project$HierarchicalEdgeBundling$viewNodes(companies),
 							A2(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations)
 						]))
 				]));

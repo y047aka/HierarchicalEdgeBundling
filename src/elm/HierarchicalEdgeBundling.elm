@@ -15,18 +15,13 @@ import TypedSvg.Types exposing (Transform(..))
 
 graph : List Company -> List ( String, String ) -> Svg msg
 graph companies relations =
-    let
-        angleScale : ContinuousScale Float
-        angleScale =
-            Scale.linear ( 0, 360 ) ( 0, toFloat (List.length companies) )
-    in
     svg
         [ width 1000
         , height 1000
         , viewBox -500 -500 1000 1000
         ]
         [ g [ TypedSvg.Attributes.class [ "companies" ] ]
-            [ viewNodes companies angleScale
+            [ viewNodes companies
             , viewCurves companies relations
             ]
         ]
@@ -75,8 +70,13 @@ viewCurve ( thetaA, thetaB ) =
         |> flip SubPath.element []
 
 
-viewNodes : List Company -> ContinuousScale Float -> Svg msg
-viewNodes companies angleScale =
+viewNodes : List Company -> Svg msg
+viewNodes companies =
+    let
+        angleScale : ContinuousScale Float
+        angleScale =
+            Scale.linear ( 0, 360 ) ( 0, toFloat (List.length companies) )
+    in
     g []
         (companies
             |> List.indexedMap (viewNode angleScale)
