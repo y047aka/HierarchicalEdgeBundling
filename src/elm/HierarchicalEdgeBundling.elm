@@ -45,8 +45,8 @@ viewCurves companies relations =
     relations
         |> List.map
             (\( a, b ) ->
-                ( findCompanyIndex a companies
-                , findCompanyIndex b companies
+                ( findCompanyIndex companies a
+                , findCompanyIndex companies b
                 )
             )
         |> List.map
@@ -98,8 +98,8 @@ viewNode angleScale i company =
         ]
 
 
-findCompanyIndex : String -> List Company -> Float
-findCompanyIndex name companies =
+findCompanyIndex : List Company -> String -> Float
+findCompanyIndex companies name =
     let
         index =
             List.findIndex (\item -> item.name == name) companies

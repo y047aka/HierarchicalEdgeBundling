@@ -4888,7 +4888,7 @@ var elm_community$list_extra$List$Extra$findIndexHelp = F3(
 	});
 var elm_community$list_extra$List$Extra$findIndex = elm_community$list_extra$List$Extra$findIndexHelp(0);
 var author$project$HierarchicalEdgeBundling$findCompanyIndex = F2(
-	function (name, companies) {
+	function (companies, name) {
 		var index = A2(
 			elm_community$list_extra$List$Extra$findIndex,
 			function (item) {
@@ -6354,8 +6354,8 @@ var author$project$HierarchicalEdgeBundling$viewCurves = F2(
 							var a = _n0.a;
 							var b = _n0.b;
 							return _Utils_Tuple2(
-								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
-								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, a),
+								A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, companies, b));
 						},
 						relations))));
 	});
