@@ -15,6 +15,11 @@ import TypedSvg.Types exposing (Transform(..))
 
 graph : List Company -> List ( String, String ) -> Svg msg
 graph companies relations =
+    let
+        angleScale : ContinuousScale Float
+        angleScale =
+            Scale.linear ( 0, 360 ) ( 0, toFloat (List.length companies) )
+    in
     svg
         [ width 1000
         , height 1000
@@ -22,56 +27,52 @@ graph companies relations =
         ]
         [ g [ TypedSvg.Attributes.class [ "companies" ] ]
             [ g []
-                (List.indexedMap viewNode companies)
-            , g []
-                (relations
-                    |> List.map (\( a, b ) -> ( findCompanyIndex a companies, findCompanyIndex b companies ))
-                    |> List.map (\( a, b ) -> viewCurve a b)
+                (companies
+                    |> List.indexedMap (viewNode angleScale)
                 )
+            , g [] (viewCurves companies relations angleScale)
             ]
         ]
 
 
-viewCurve : Float -> Float -> Svg msg
-viewCurve node1 node2 =
+viewCurves companies relations angleScale =
+    relations
+        |> List.map (\( a, b ) -> ( findCompanyIndex a companies, findCompanyIndex b companies ))
+        |> List.map (\( a, b ) -> viewCurve a b angleScale)
+
+
+viewCurve : Float -> Float -> ContinuousScale Float -> Svg msg
+viewCurve node1 node2 angleScale =
     let
         r =
             400
 
-        angleScale : ContinuousScale Float
-        angleScale =
-            Scale.linear ( degrees 0, degrees 360 ) ( 0, 6 )
+        angleA =
+            node1 |> Scale.convert angleScale |> degrees
+
+        angleB =
+            node2 |> Scale.convert angleScale |> degrees
+
+        points =
+            [ ( r * cos angleA, r * sin angleA )
+            , ( 0, 0 )
+            , ( r * cos angleB, r * sin angleB )
+            ]
 
         flip : (a -> b -> c) -> b -> a -> c
         flip function argB argA =
             function argA argB
     in
-    ( node1, node2 )
-        |> (\( a, b ) ->
-                [ ( r * cos (Scale.convert angleScale a)
-                  , r * sin (Scale.convert angleScale a)
-                  )
-                , ( 0, 0 )
-                , ( r * cos (Scale.convert angleScale b)
-                  , r * sin (Scale.convert angleScale b)
-                  )
-                ]
-           )
+    points
         |> Curve.bundle 0.2
         |> flip SubPath.element []
 
 
-viewNode : Int -> Company -> Svg msg
-viewNode i company =
+viewNode : ContinuousScale Float -> Int -> Company -> Svg msg
+viewNode angleScale i company =
     let
-        angleScale : ContinuousScale Float
-        angleScale =
-            Scale.linear ( 0, 360 ) ( 0, 6 )
-
         angle =
-            i
-                |> toFloat
-                |> Scale.convert angleScale
+            i |> toFloat |> Scale.convert angleScale
     in
     g [ transform [ Rotate angle 0 0 ] ]
         [ text_ [ x 405, y 0 ]

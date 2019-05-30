@@ -4430,7 +4430,10 @@ var elm$core$Set$toList = function (_n0) {
 var author$project$Data$companies = _List_fromArray(
 	[
 		{name: 'ALE'},
+		{name: 'Bigelow Aerospace'},
 		{name: 'Blue Origine'},
+		{name: 'ESA'},
+		{name: 'ispace'},
 		{name: 'JAXA'},
 		{name: 'MHI'},
 		{name: 'NASA'},
@@ -4849,7 +4852,13 @@ var author$project$Data$relations = _List_fromArray(
 	[
 		_Utils_Tuple2('ALE', 'MHI'),
 		_Utils_Tuple2('ALE', 'JAXA'),
+		_Utils_Tuple2('Bigelow Aerospace', 'NASA'),
+		_Utils_Tuple2('Bigelow Aerospace', 'SpaceX'),
+		_Utils_Tuple2('ESA', 'ispace'),
+		_Utils_Tuple2('ESA', 'JAXA'),
+		_Utils_Tuple2('ESA', 'NASA'),
 		_Utils_Tuple2('Blue Origine', 'NASA'),
+		_Utils_Tuple2('ispace', 'SpaceX'),
 		_Utils_Tuple2('JAXA', 'MHI'),
 		_Utils_Tuple2('JAXA', 'NASA'),
 		_Utils_Tuple2('NASA', 'SpaceX')
@@ -6074,6 +6083,282 @@ var gampleman$elm_visualization$Scale$convert = F2(
 		var scale = _n0.a;
 		return A3(scale.convert, scale.domain, scale.range, value);
 	});
+var author$project$HierarchicalEdgeBundling$viewCurve = F3(
+	function (node1, node2, angleScale) {
+		var r = 400;
+		var flip = F3(
+			function (_function, argB, argA) {
+				return A2(_function, argA, argB);
+			});
+		var angleB = elm$core$Basics$degrees(
+			A2(gampleman$elm_visualization$Scale$convert, angleScale, node2));
+		var angleA = elm$core$Basics$degrees(
+			A2(gampleman$elm_visualization$Scale$convert, angleScale, node1));
+		var points = _List_fromArray(
+			[
+				_Utils_Tuple2(
+				r * elm$core$Basics$cos(angleA),
+				r * elm$core$Basics$sin(angleA)),
+				_Utils_Tuple2(0, 0),
+				_Utils_Tuple2(
+				r * elm$core$Basics$cos(angleB),
+				r * elm$core$Basics$sin(angleB))
+			]);
+		return A3(
+			flip,
+			folkertdev$one_true_path_experiment$SubPath$element,
+			_List_Nil,
+			A2(folkertdev$one_true_path_experiment$Curve$bundle, 0.2, points));
+	});
+var author$project$HierarchicalEdgeBundling$viewCurves = F3(
+	function (companies, relations, angleScale) {
+		return A2(
+			elm$core$List$map,
+			function (_n1) {
+				var a = _n1.a;
+				var b = _n1.b;
+				return A3(author$project$HierarchicalEdgeBundling$viewCurve, a, b, angleScale);
+			},
+			A2(
+				elm$core$List$map,
+				function (_n0) {
+					var a = _n0.a;
+					var b = _n0.b;
+					return _Utils_Tuple2(
+						A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
+						A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
+				},
+				relations));
+	});
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
+	return _VirtualDom_nodeNS(
+		_VirtualDom_noScript(tag));
+};
+var elm_community$typed_svg$TypedSvg$Core$node = elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
+var elm_community$typed_svg$TypedSvg$g = elm_community$typed_svg$TypedSvg$Core$node('g');
+var elm_community$typed_svg$TypedSvg$text_ = elm_community$typed_svg$TypedSvg$Core$node('text');
+var elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var elm_community$typed_svg$TypedSvg$Core$attribute = elm$virtual_dom$VirtualDom$attribute;
+var elm$core$String$concat = function (strings) {
+	return A2(elm$core$String$join, '', strings);
+};
+var elm_community$typed_svg$TypedSvg$TypesToStrings$transformToString = function (xform) {
+	var tr = F2(
+		function (name, args) {
+			return elm$core$String$concat(
+				_List_fromArray(
+					[
+						name,
+						'(',
+						A2(
+						elm$core$String$join,
+						' ',
+						A2(elm$core$List$map, elm$core$String$fromFloat, args)),
+						')'
+					]));
+		});
+	switch (xform.$) {
+		case 'Matrix':
+			var a = xform.a;
+			var b = xform.b;
+			var c = xform.c;
+			var d = xform.d;
+			var e = xform.e;
+			var f = xform.f;
+			return A2(
+				tr,
+				'matrix',
+				_List_fromArray(
+					[a, b, c, d, e, f]));
+		case 'Rotate':
+			var a = xform.a;
+			var x = xform.b;
+			var y = xform.c;
+			return A2(
+				tr,
+				'rotate',
+				_List_fromArray(
+					[a, x, y]));
+		case 'Scale':
+			var x = xform.a;
+			var y = xform.b;
+			return A2(
+				tr,
+				'scale',
+				_List_fromArray(
+					[x, y]));
+		case 'SkewX':
+			var x = xform.a;
+			return A2(
+				tr,
+				'skewX',
+				_List_fromArray(
+					[x]));
+		case 'SkewY':
+			var y = xform.a;
+			return A2(
+				tr,
+				'skewY',
+				_List_fromArray(
+					[y]));
+		default:
+			var x = xform.a;
+			var y = xform.b;
+			return A2(
+				tr,
+				'translate',
+				_List_fromArray(
+					[x, y]));
+	}
+};
+var elm_community$typed_svg$TypedSvg$Attributes$transform = function (transforms) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'transform',
+		A2(
+			elm$core$String$join,
+			' ',
+			A2(elm$core$List$map, elm_community$typed_svg$TypedSvg$TypesToStrings$transformToString, transforms)));
+};
+var elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
+	switch (length.$) {
+		case 'Cm':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'cm';
+		case 'Em':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'em';
+		case 'Ex':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'ex';
+		case 'In':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'in';
+		case 'Mm':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'mm';
+		case 'Num':
+			var x = length.a;
+			return elm$core$String$fromFloat(x);
+		case 'Pc':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'pc';
+		case 'Percent':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + '%';
+		case 'Pt':
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'pt';
+		default:
+			var x = length.a;
+			return elm$core$String$fromFloat(x) + 'px';
+	}
+};
+var elm_community$typed_svg$TypedSvg$Attributes$x = function (length) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'x',
+		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var elm_community$typed_svg$TypedSvg$Types$Px = function (a) {
+	return {$: 'Px', a: a};
+};
+var elm_community$typed_svg$TypedSvg$Types$px = elm_community$typed_svg$TypedSvg$Types$Px;
+var elm_community$typed_svg$TypedSvg$Attributes$InPx$x = function (value) {
+	return elm_community$typed_svg$TypedSvg$Attributes$x(
+		elm_community$typed_svg$TypedSvg$Types$px(value));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$y = function (length) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'y',
+		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$InPx$y = function (value) {
+	return elm_community$typed_svg$TypedSvg$Attributes$y(
+		elm_community$typed_svg$TypedSvg$Types$px(value));
+};
+var elm_community$typed_svg$TypedSvg$Types$Rotate = F3(
+	function (a, b, c) {
+		return {$: 'Rotate', a: a, b: b, c: c};
+	});
+var author$project$HierarchicalEdgeBundling$viewNode = F3(
+	function (angleScale, i, company) {
+		var angle = A2(gampleman$elm_visualization$Scale$convert, angleScale, i);
+		return A2(
+			elm_community$typed_svg$TypedSvg$g,
+			_List_fromArray(
+				[
+					elm_community$typed_svg$TypedSvg$Attributes$transform(
+					_List_fromArray(
+						[
+							A3(elm_community$typed_svg$TypedSvg$Types$Rotate, angle, 0, 0)
+						]))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm_community$typed_svg$TypedSvg$text_,
+					_List_fromArray(
+						[
+							elm_community$typed_svg$TypedSvg$Attributes$InPx$x(405),
+							elm_community$typed_svg$TypedSvg$Attributes$InPx$y(0)
+						]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(company.name)
+						]))
+				]));
+	});
+var elm_community$typed_svg$TypedSvg$svg = elm_community$typed_svg$TypedSvg$Core$node('svg');
+var elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'class',
+		A2(elm$core$String$join, ' ', names));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$viewBox = F4(
+	function (minX, minY, vWidth, vHeight) {
+		return A2(
+			elm_community$typed_svg$TypedSvg$Core$attribute,
+			'viewBox',
+			A2(
+				elm$core$String$join,
+				' ',
+				A2(
+					elm$core$List$map,
+					elm$core$String$fromFloat,
+					_List_fromArray(
+						[minX, minY, vWidth, vHeight]))));
+	});
+var elm_community$typed_svg$TypedSvg$Attributes$height = function (length) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'height',
+		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$InPx$height = function (value) {
+	return elm_community$typed_svg$TypedSvg$Attributes$height(
+		elm_community$typed_svg$TypedSvg$Types$px(value));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$width = function (length) {
+	return A2(
+		elm_community$typed_svg$TypedSvg$Core$attribute,
+		'width',
+		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var elm_community$typed_svg$TypedSvg$Attributes$InPx$width = function (value) {
+	return elm_community$typed_svg$TypedSvg$Attributes$width(
+		elm_community$typed_svg$TypedSvg$Types$px(value));
+};
 var gampleman$elm_visualization$Scale$Scale = function (a) {
 	return {$: 'Scale', a: a};
 };
@@ -6279,281 +6564,14 @@ var gampleman$elm_visualization$Scale$linear = F2(
 		return gampleman$elm_visualization$Scale$Scale(
 			{convert: gampleman$elm_visualization$Scale$Linear$convert, domain: domain_, invert: gampleman$elm_visualization$Scale$Linear$invert, nice: gampleman$elm_visualization$Scale$Linear$nice, range: range_, rangeExtent: gampleman$elm_visualization$Scale$Linear$rangeExtent, tickFormat: gampleman$elm_visualization$Scale$Linear$tickFormat, ticks: gampleman$elm_visualization$Scale$Linear$ticks});
 	});
-var author$project$HierarchicalEdgeBundling$viewCurve = F2(
-	function (node1, node2) {
-		var r = 400;
-		var flip = F3(
-			function (_function, argB, argA) {
-				return A2(_function, argA, argB);
-			});
-		var angleScale = A2(
-			gampleman$elm_visualization$Scale$linear,
-			_Utils_Tuple2(
-				elm$core$Basics$degrees(0),
-				elm$core$Basics$degrees(360)),
-			_Utils_Tuple2(0, 6));
-		return A3(
-			flip,
-			folkertdev$one_true_path_experiment$SubPath$element,
-			_List_Nil,
-			A2(
-				folkertdev$one_true_path_experiment$Curve$bundle,
-				0.2,
-				function (_n0) {
-					var a = _n0.a;
-					var b = _n0.b;
-					return _List_fromArray(
-						[
-							_Utils_Tuple2(
-							r * elm$core$Basics$cos(
-								A2(gampleman$elm_visualization$Scale$convert, angleScale, a)),
-							r * elm$core$Basics$sin(
-								A2(gampleman$elm_visualization$Scale$convert, angleScale, a))),
-							_Utils_Tuple2(0, 0),
-							_Utils_Tuple2(
-							r * elm$core$Basics$cos(
-								A2(gampleman$elm_visualization$Scale$convert, angleScale, b)),
-							r * elm$core$Basics$sin(
-								A2(gampleman$elm_visualization$Scale$convert, angleScale, b)))
-						]);
-				}(
-					_Utils_Tuple2(node1, node2))));
-	});
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
-var elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
-	return _VirtualDom_nodeNS(
-		_VirtualDom_noScript(tag));
-};
-var elm_community$typed_svg$TypedSvg$Core$node = elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
-var elm_community$typed_svg$TypedSvg$g = elm_community$typed_svg$TypedSvg$Core$node('g');
-var elm_community$typed_svg$TypedSvg$text_ = elm_community$typed_svg$TypedSvg$Core$node('text');
-var elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var elm_community$typed_svg$TypedSvg$Core$attribute = elm$virtual_dom$VirtualDom$attribute;
-var elm$core$String$concat = function (strings) {
-	return A2(elm$core$String$join, '', strings);
-};
-var elm_community$typed_svg$TypedSvg$TypesToStrings$transformToString = function (xform) {
-	var tr = F2(
-		function (name, args) {
-			return elm$core$String$concat(
-				_List_fromArray(
-					[
-						name,
-						'(',
-						A2(
-						elm$core$String$join,
-						' ',
-						A2(elm$core$List$map, elm$core$String$fromFloat, args)),
-						')'
-					]));
-		});
-	switch (xform.$) {
-		case 'Matrix':
-			var a = xform.a;
-			var b = xform.b;
-			var c = xform.c;
-			var d = xform.d;
-			var e = xform.e;
-			var f = xform.f;
-			return A2(
-				tr,
-				'matrix',
-				_List_fromArray(
-					[a, b, c, d, e, f]));
-		case 'Rotate':
-			var a = xform.a;
-			var x = xform.b;
-			var y = xform.c;
-			return A2(
-				tr,
-				'rotate',
-				_List_fromArray(
-					[a, x, y]));
-		case 'Scale':
-			var x = xform.a;
-			var y = xform.b;
-			return A2(
-				tr,
-				'scale',
-				_List_fromArray(
-					[x, y]));
-		case 'SkewX':
-			var x = xform.a;
-			return A2(
-				tr,
-				'skewX',
-				_List_fromArray(
-					[x]));
-		case 'SkewY':
-			var y = xform.a;
-			return A2(
-				tr,
-				'skewY',
-				_List_fromArray(
-					[y]));
-		default:
-			var x = xform.a;
-			var y = xform.b;
-			return A2(
-				tr,
-				'translate',
-				_List_fromArray(
-					[x, y]));
-	}
-};
-var elm_community$typed_svg$TypedSvg$Attributes$transform = function (transforms) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'transform',
-		A2(
-			elm$core$String$join,
-			' ',
-			A2(elm$core$List$map, elm_community$typed_svg$TypedSvg$TypesToStrings$transformToString, transforms)));
-};
-var elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
-	switch (length.$) {
-		case 'Cm':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'cm';
-		case 'Em':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'em';
-		case 'Ex':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'ex';
-		case 'In':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'in';
-		case 'Mm':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'mm';
-		case 'Num':
-			var x = length.a;
-			return elm$core$String$fromFloat(x);
-		case 'Pc':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'pc';
-		case 'Percent':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + '%';
-		case 'Pt':
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'pt';
-		default:
-			var x = length.a;
-			return elm$core$String$fromFloat(x) + 'px';
-	}
-};
-var elm_community$typed_svg$TypedSvg$Attributes$x = function (length) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'x',
-		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var elm_community$typed_svg$TypedSvg$Types$Px = function (a) {
-	return {$: 'Px', a: a};
-};
-var elm_community$typed_svg$TypedSvg$Types$px = elm_community$typed_svg$TypedSvg$Types$Px;
-var elm_community$typed_svg$TypedSvg$Attributes$InPx$x = function (value) {
-	return elm_community$typed_svg$TypedSvg$Attributes$x(
-		elm_community$typed_svg$TypedSvg$Types$px(value));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$y = function (length) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'y',
-		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$InPx$y = function (value) {
-	return elm_community$typed_svg$TypedSvg$Attributes$y(
-		elm_community$typed_svg$TypedSvg$Types$px(value));
-};
-var elm_community$typed_svg$TypedSvg$Types$Rotate = F3(
-	function (a, b, c) {
-		return {$: 'Rotate', a: a, b: b, c: c};
-	});
-var author$project$HierarchicalEdgeBundling$viewNode = F2(
-	function (i, company) {
+var author$project$HierarchicalEdgeBundling$graph = F2(
+	function (companies, relations) {
 		var angleScale = A2(
 			gampleman$elm_visualization$Scale$linear,
 			_Utils_Tuple2(0, 360),
-			_Utils_Tuple2(0, 6));
-		var angle = A2(gampleman$elm_visualization$Scale$convert, angleScale, i);
-		return A2(
-			elm_community$typed_svg$TypedSvg$g,
-			_List_fromArray(
-				[
-					elm_community$typed_svg$TypedSvg$Attributes$transform(
-					_List_fromArray(
-						[
-							A3(elm_community$typed_svg$TypedSvg$Types$Rotate, angle, 0, 0)
-						]))
-				]),
-			_List_fromArray(
-				[
-					A2(
-					elm_community$typed_svg$TypedSvg$text_,
-					_List_fromArray(
-						[
-							elm_community$typed_svg$TypedSvg$Attributes$InPx$x(405),
-							elm_community$typed_svg$TypedSvg$Attributes$InPx$y(0)
-						]),
-					_List_fromArray(
-						[
-							elm$html$Html$text(company.name)
-						]))
-				]));
-	});
-var elm_community$typed_svg$TypedSvg$svg = elm_community$typed_svg$TypedSvg$Core$node('svg');
-var elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'class',
-		A2(elm$core$String$join, ' ', names));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$viewBox = F4(
-	function (minX, minY, vWidth, vHeight) {
-		return A2(
-			elm_community$typed_svg$TypedSvg$Core$attribute,
-			'viewBox',
-			A2(
-				elm$core$String$join,
-				' ',
-				A2(
-					elm$core$List$map,
-					elm$core$String$fromFloat,
-					_List_fromArray(
-						[minX, minY, vWidth, vHeight]))));
-	});
-var elm_community$typed_svg$TypedSvg$Attributes$height = function (length) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'height',
-		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$InPx$height = function (value) {
-	return elm_community$typed_svg$TypedSvg$Attributes$height(
-		elm_community$typed_svg$TypedSvg$Types$px(value));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$width = function (length) {
-	return A2(
-		elm_community$typed_svg$TypedSvg$Core$attribute,
-		'width',
-		elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var elm_community$typed_svg$TypedSvg$Attributes$InPx$width = function (value) {
-	return elm_community$typed_svg$TypedSvg$Attributes$width(
-		elm_community$typed_svg$TypedSvg$Types$px(value));
-};
-var author$project$HierarchicalEdgeBundling$graph = F2(
-	function (companies, relations) {
+			_Utils_Tuple2(
+				0,
+				elm$core$List$length(companies)));
 		return A2(
 			elm_community$typed_svg$TypedSvg$svg,
 			_List_fromArray(
@@ -6577,27 +6595,14 @@ var author$project$HierarchicalEdgeBundling$graph = F2(
 							A2(
 							elm_community$typed_svg$TypedSvg$g,
 							_List_Nil,
-							A2(elm$core$List$indexedMap, author$project$HierarchicalEdgeBundling$viewNode, companies)),
+							A2(
+								elm$core$List$indexedMap,
+								author$project$HierarchicalEdgeBundling$viewNode(angleScale),
+								companies)),
 							A2(
 							elm_community$typed_svg$TypedSvg$g,
 							_List_Nil,
-							A2(
-								elm$core$List$map,
-								function (_n1) {
-									var a = _n1.a;
-									var b = _n1.b;
-									return A2(author$project$HierarchicalEdgeBundling$viewCurve, a, b);
-								},
-								A2(
-									elm$core$List$map,
-									function (_n0) {
-										var a = _n0.a;
-										var b = _n0.b;
-										return _Utils_Tuple2(
-											A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, a, companies),
-											A2(author$project$HierarchicalEdgeBundling$findCompanyIndex, b, companies));
-									},
-									relations)))
+							A3(author$project$HierarchicalEdgeBundling$viewCurves, companies, relations, angleScale))
 						]))
 				]));
 	});
